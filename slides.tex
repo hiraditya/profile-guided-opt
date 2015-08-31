@@ -3,7 +3,7 @@
 \begin{document}
 
 \title{Profile guided optimization using open source tools}
-\author{Aditya Kumar}
+\author{Sebastian Pop and Aditya Kumar}
 \institute{SARC: Samsung Austin R\&D Center}
 %\date{May 5, 2015}
 \date{\today}
@@ -41,7 +41,6 @@
     \item gprof [exe] [gmon.out] $>$ [outfile]
   \end{itemize}
 }
-
 \frame{\frametitle{AutoFDO: Non Intrusive}
     \begin{itemize}
         \item Linux perf collects profiles (Sample based)
@@ -53,6 +52,27 @@
         \item report: perf report [perf.data]
     \end{itemize}
 }
+
+
+\frame{\frametitle{Challenges for non-intrusive AutoFDO}
+    \begin{itemize}
+        \item value based profiling.
+        \item only works on recent intel machines.
+        \item tradeoff between accuracy of profile and overhead.
+        \item Goal is to be as close to the instrumented profile.
+        \item Getting it to work requires patching the kernel.
+    \end{itemize}
+}
+
+\frame{\frametitle{Comparison Intrusive vs. Non-intrusive.}
+    \begin{itemize}
+        \item Linux-perf: Run on different machines and at different time intervals. 
+        \item Linux-perf: Good for system wide profiling.
+        \item Instrumented: Gives very precise profile information.
+        \item Instrumented: Good for benchmarking, analyzing small programs.
+    \end{itemize}
+}
+
 
 \frame{\frametitle{create\_gcov}
     \begin{itemize}
