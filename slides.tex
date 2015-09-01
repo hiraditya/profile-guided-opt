@@ -11,68 +11,84 @@
 \frame{\titlepage}
 
 \frame{\frametitle{Profile guided optimization (Introduction)}
-    \begin{itemize}
-        \item Iterative approach to program optimization.
-            \begin{itemize}
-                \item Compile -- Run + Collect Profile --Process Profile data -- Compile with profile info. -- Run
-            \end{itemize}
-        \item Intrusive approach (PGO)
-        \item Non-intrusive approach (AutoFDO)
-    \end{itemize}
+  \begin{itemize}
+    \item Iterative approach to program optimization.
+      \begin{itemize}
+        \item Compile $-->$ Run + Collect Profile $-->$ Process Profile data $-->$ Compile with profile info. $-->$ Run
+      \end{itemize}
+    \item Intrusive approach (PGO)
+    \item Non-intrusive approach (AutoFDO)
+  \end{itemize}
 }
 
 \frame{\frametitle{Open source tools}
-    \begin{itemize}
-        \item Compiler: gcc, llvm
-        \item Gprof
-        \item Linux Perf
-        \item Create\_gcov
-        \item Gooda
-    \end{itemize}
+  \begin{itemize}
+    \item Compiler: gcc, llvm
+    \item Gprof
+    \item Linux Perf
+    \item Create\_gcov
+    \item Gooda
+  \end{itemize}
 }
 
 \frame{\frametitle{PGO: Compiler instrumentation}
   \begin{itemize}
-  \item Compiler inserts probes in the code.
+    \item Compiler inserts probes in the code.
     \item Instrumented program collects profile as it executes.
+    \item Gives very precise profile information.
+    \item Good for benchmarking, analyzing small programs.
     \item gprof/gcov used to process sampled output and display.
-    \item gprof: gcc -fprofile-generate test.cpp
-    \item gcov: gcc -fprofile-arcs -ftest-coverage test.cpp
-    \item gprof [exe] [gmon.out] $>$ [outfile]
   \end{itemize}
 }
-\frame{\frametitle{AutoFDO: Non Intrusive}
-    \begin{itemize}
-        \item Linux perf collects profiles (Sample based)
-        \item No compiler instrumentation, debug-info required while running.
-        \item Negligible overhead (less than a few percent) [Google]
-        \item perf record/report/stat
-        \item compiling program: gcc -g3 -O2 test.cpp
-        \item collecting profile: perf record -b [exe] [-o perf.data]
-        \item report: perf report [perf.data]
-    \end{itemize}
+
+\frame{\frametitle{PGO: Compiler instrumentation (Useful Commands)}
+  gprof:
+  \begin{itemize}
+    \item gcc -fprofile-generate test.cpp
+    \item gprof [exe] [gmon.out] $>$ [outfile]
+  \end{itemize}
+  gcov:
+  \begin{itemize}
+    \item gcc -fprofile-arcs -ftest-coverage test.cpp
+    \item gcov [options] test.cpp
+  \end{itemize}
 }
 
+\frame{\frametitle{AutoFDO: Non Intrusive}
+  \begin{itemize}
+    \item Linux perf collects profiles (Sample based)
+    \item No compiler instrumentation, debug-info required while running.
+    \item Negligible overhead (1-2\%) [Google]
+    \item Run on different machines and at different time intervals. 
+    \item Good for system wide profiling.
+    \item Profiles are relatively resistant to code drift [Google].
+  \end{itemize}
+}
+
+\frame{\frametitle{AutoFDO: Non Intrusive (Useful Commands)}
+  \begin{itemize}
+    \item perf record/report/stat
+    \item collecting profile: perf record -b [exe] [-o perf.data]
+    \item report: perf report [perf.data]
+  \end{itemize}
+}
 
 \frame{\frametitle{Challenges for non-intrusive AutoFDO}
-    \begin{itemize}
-        \item Value based profiling not available.
-        \item Only works on recent Intel machines.
-        \item Tradeoff between accuracy of profile and overhead.
-        \item Goal is to be as close to the instrumented profile.
-        \item Getting it to work requires patching the kernel.
-    \end{itemize}
+  \begin{itemize}
+    \item Value based profiling not available.
+    \item Only works on recent Intel machines.
+    \item Tradeoff between accuracy of profile and overhead.
+    \item Goal is to be as close to the instrumented profile.
+    \item Getting it to work requires patching the kernel.
+  \end{itemize}
 }
 
-\frame{\frametitle{Comparison Intrusive vs. Non-intrusive.}
-    \begin{itemize}
-        \item Linux-perf: Run on different machines and at different time intervals. 
-        \item Linux-perf: Good for system wide profiling.
-        \item Instrumented: Gives very precise profile information.
-        \item Instrumented: Good for benchmarking, analyzing small programs.
-    \end{itemize}
+\frame{\frametitle{Challenges for non-intrusive AutoFDO...}
+  \begin{itemize}
+    \item Calculating missing edge/basic-block frequencies based on Equivalence class.
+    \item Calculating accurate profile of execution paths sharing single line of code based on DWARF discriminator [Baptiste Wicht].
+  \end{itemize}
 }
-
 
 \frame{\frametitle{create\_gcov}
     \begin{itemize}
@@ -92,9 +108,25 @@
     \end{itemize}
 }
 
+\frame{\frametitle{Interesting Areas}
+  Tools related:
+  \begin{itemize}
+    \item Extend AutoFDO infrastructure in gcc/llvm for non-branchy optimizations.
+    \item Compiler cost model based on profile to enable demand driven optimization.
+    \item Online optimizations driven by hardware performance monitoring [Schneider et al.].
+  \end{itemize}
+  Architecture specific:
+  \begin{itemize}
+    \item No AutoFDO tool for generating value profiles.
+    \item Kernel support missing for ETM (ARM).
+  \end{itemize}
+
+}
+
 \frame{\frametitle{References}
     \begin{itemize}
     \item \url{http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36575.pdf}
+    \item Baptiste Wicht et al. ``Hardware Counted Profile-Guided Optimization.''
     \item \url{http://www.burningcutlery.com/derek/docs/instant-profiling-CGO13.pdf}
     \item \url{https://github.com/David-Levinthal/gooda}
     \item \url{https://github.com/google/autofdo}
