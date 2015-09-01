@@ -72,6 +72,17 @@
   \end{itemize}
 }
 
+
+\frame{\frametitle{Results [Baptiste Wicht et al.]}
+    \begin{tabular}{| l | p {2.5cm} | p {3cm} | }
+        \hline
+        PGO Kind & Avg. Run Time Overhead (\%) & Performance Improvement (\%) \\ \hline
+        Instrumented & 16 (highest 53) & 7 to 14  \\ \hline
+        AutoFDO & 1 to 2 & 5 to 10 \\
+        \hline
+    \end{tabular}
+}
+
 \frame{\frametitle{Challenges for non-intrusive AutoFDO}
   \begin{itemize}
     \item Value based profiling not available.
@@ -85,7 +96,7 @@
 \frame{\frametitle{Challenges for non-intrusive AutoFDO...}
   \begin{itemize}
     \item Calculating missing edge/basic-block frequencies based on Equivalence class.
-    \item Calculating accurate profile of execution paths sharing single line of code based on DWARF discriminator [Baptiste Wicht].
+    \item Calculating accurate profile of execution paths sharing single line of code based on DWARF discriminator [Baptiste Wicht et al.].
   \end{itemize}
 }
 
