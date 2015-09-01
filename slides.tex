@@ -78,8 +78,8 @@
         \hline
         PGO Kind & Avg. Run Time Overhead (\%) & Performance Improvement (\%) \\ \hline
         Instrumented & 16 (highest 53) & 7 to 14  \\ \hline
-        AutoFDO & 1 to 2 & 5 to 10 \\
-        \hline
+        AutoFDO & 1 to 2 & 5 to 10 \\ \hline
+        AutoFDO+LTO & 1 to 2 & 10 to 30 \\ \hline
     \end{tabular}
 }
 
@@ -120,7 +120,8 @@
 \frame{\frametitle{Interesting Areas}
   Tools related:
   \begin{itemize}
-    \item Extend AutoFDO infrastructure in gcc/llvm for non-branchy optimizations.
+    \item Extend PGO infrastructure in gcc/llvm:
+      currently PGO benefits inliner, code layout, register allocation.
     \item Compiler cost model based on profile to enable demand driven optimization.
     \item Online optimizations driven by hardware performance monitoring [Schneider et al.].
   \end{itemize}
